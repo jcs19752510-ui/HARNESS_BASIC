@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, Form, Request, Response, status
+from fastapi import APIRouter, Depends, Form, Request, status
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -34,8 +35,14 @@ async def login_submit(
 ):
     user = db.query(User).filter(User.username == username).first()
 
+    # bcrypt는 의도적으로 CPU 연산이 무거운 함수라, 이벤트 루프에서 동기 호출하면
+    # 동시 요청 전체가 그 시간만큼 블로킹된다 — 스레드풀로 오프로드 (코드리뷰에서 발견)
+    password_ok = False
+    if user is not None and user.use_yn == "Y":
+        password_ok = await run_in_threadpool(verify_password, password, user.password_hash)
+
     # AC-2/AC-3/AC-4: 존재 여부/비활성 여부를 구분하지 않고 동일한 응답
-    if user is None or user.use_yn != "Y" or not verify_password(password, user.password_hash):
+    if user is None or user.use_yn != "Y" or not password_ok:
         return templates.TemplateResponse(
             request,
             "login.html",
@@ -50,9 +57,13 @@ async def login_submit(
 
 
 @router.post("/logout")
-async def logout(_csrf_ok: bool = Depends(verify_csrf)):
+async def logout(request: Request, _csrf_ok: bool = Depends(verify_csrf)):
     redirect = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     clear_session_cookie(redirect)
+    # verify_csrf -> require_login이 이 요청 초입에 request.state.session을 채워뒀으므로,
+    # 여기서 비워두지 않으면 SessionRenewalMiddleware가 응답 직후 세션 쿠키를 다시
+    # 발급해 로그아웃을 무효화한다 (fix 적용 중 회귀 테스트로 발견).
+    request.state.session = None
     return redirect
 
 

@@ -33,7 +33,10 @@
 | use_yn | CHAR(1) | 'N'이면 로그인 차단 |
 
 세션 저장: 서버 메모리 또는 DB 세션 테이블 대신, **서명된 쿠키(signed cookie)** 방식 사용
-(FastAPI의 `SessionMiddleware` + `itsdangerous`). 별도 세션 테이블 불필요.
+(`itsdangerous URLSafeTimedSerializer` 직접 사용 — Starlette `SessionMiddleware` 클래스는
+미사용. CSRF 토큰 발급/검증과 슬라이딩 만료를 자체 미들웨어로 결합하기 위해 A1 구현 시
+확정. 이전 버전은 "FastAPI SessionMiddleware"로 적었으나 실제 구현과 달라 정정함 —
+하네스 원칙 6). 별도 세션 테이블 불필요.
 
 **보안 속성 (CR-001, `docs/attend_adr.md` ADR-006·ADR-007):**
 - 세션 쿠키: `HttpOnly=true`, `Secure=true`(운영 기본값, 로컬 개발만 환경변수로 완화),

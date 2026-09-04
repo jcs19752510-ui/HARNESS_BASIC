@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 
 from src.auth.dependencies import NotAuthenticated
+from src.auth.middleware import SessionRenewalMiddleware
 from src.db import Base, engine
 from src.routes.auth import router as auth_router
 
@@ -11,6 +12,7 @@ from src.routes.auth import router as auth_router
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="학생 출결 등록 프로그램")
+app.add_middleware(SessionRenewalMiddleware)
 
 
 @app.exception_handler(NotAuthenticated)

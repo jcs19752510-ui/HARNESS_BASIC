@@ -66,6 +66,28 @@ def test_ac6_session_expires_after_max_age(client, active_user, monkeypatch):
     assert resp.headers["location"] == "/login"
 
 
+def test_ac6_active_use_extends_session_before_expiry(client, active_user, monkeypatch):
+    """활동이 있으면 세션이 갱신되어야 한다 — SessionRenewalMiddleware 회귀 테스트.
+    (require_login이 직접 쿠키를 설정하던 이전 구현에서는 라우트가 자체 Response를
+    반환하면 그 갱신이 조용히 무시되는 버그가 있었음. 코드리뷰에서 발견 후 수정.)"""
+    import time
+
+    from src import config as config_module
+
+    client.post("/login", data={"username": "teacher001", "password": VALID_PASSWORD})
+
+    monkeypatch.setattr(config_module, "SESSION_MAX_AGE_SECONDS", 2)
+
+    time.sleep(1.2)
+    resp1 = client.get("/")  # 활동 발생 → 쿠키 만료시각이 갱신되어야 함
+    assert resp1.status_code == 200
+    assert "set-cookie" in {k.lower() for k in resp1.headers.keys()}
+
+    time.sleep(1.2)  # 누적 2.4s > max_age(2s)지만, 직전 활동으로 갱신됐다면 여전히 유효해야 함
+    resp2 = client.get("/", follow_redirects=False)
+    assert resp2.status_code == 200
+
+
 def test_ac7_unauthenticated_access_redirects_to_login(client):
     resp = client.get("/", follow_redirects=False)
     assert resp.status_code == 302

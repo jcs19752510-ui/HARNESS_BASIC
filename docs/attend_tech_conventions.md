@@ -14,7 +14,11 @@
 - ORM: SQLAlchemy
 - 데이터베이스: PostgreSQL (NeonDB 관리형)
 - 비밀번호 해시: bcrypt
-- 세션: 서명된 쿠키(itsdangerous + FastAPI SessionMiddleware) — 별도 세션 테이블 없음
+- 세션: 서명된 쿠키(itsdangerous `URLSafeTimedSerializer` 직접 사용) — 별도 세션 테이블 없음.
+  Starlette의 `SessionMiddleware` 클래스는 사용하지 않는다 — CSRF 토큰 발급/검증과
+  "활동 시 자동 연장"(슬라이딩 만료)을 자체 미들웨어(`SessionRenewalMiddleware`)로
+  결합해야 해서 커스텀 구현으로 확정 (A1 실제 구현 시 결정, 하네스 원칙 6에 따라
+  이전 표기와의 편차를 기록함)
 - 테스트: pytest
 - 관련 ADR: `docs/attend_adr.md`의 ADR-003(인증방식), ADR-004(비밀번호저장)
 

@@ -1,7 +1,7 @@
 import secrets
 from typing import Optional
 
-from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
+from itsdangerous import BadData, URLSafeTimedSerializer
 from starlette.responses import Response
 
 from src import config
@@ -22,7 +22,9 @@ def load_session(cookie_value: Optional[str]) -> Optional[dict]:
     try:
         # SESSION_MAX_AGE_SECONDS는 매 호출 시 config 모듈에서 읽는다 (테스트에서 monkeypatch 가능하게)
         return _serializer.loads(cookie_value, max_age=config.SESSION_MAX_AGE_SECONDS)
-    except (BadSignature, SignatureExpired):
+    except BadData:
+        # BadData는 BadSignature/SignatureExpired/BadPayload/BadHeader의 공통 상위 클래스.
+        # (BadSignature만 잡으면 BadPayload는 걸러지지 않아 500으로 새는 버그였음 — 코드리뷰에서 발견)
         return None
 
 
