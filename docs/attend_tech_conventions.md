@@ -48,7 +48,11 @@
 - 네이밍: 변수/함수 `snake_case`, 클래스 `PascalCase`, 파일명 `snake_case`
 - 디렉토리 구조(권장): `src/models`(SQLAlchemy 모델), `src/routes`(엔드포인트),
   `src/auth`(세션/CSRF/인증 미들웨어 — 단위 간 재사용), `src/templates`(Jinja2),
-  `src/static`, `test/`(pytest)
+  `src/static`, `tests/`(pytest)
+  > 저장소 루트에 이미 `test`라는 이름의 파일이 존재해 `test/` 디렉토리와 이름이
+  > 충돌한다(하네스 리뷰 중 발견 — 내용은 이 프로젝트와 무관한 스크래치로 보임,
+  > 삭제 여부는 사람 확인 필요이므로 손대지 않음). 충돌을 피하기 위해 테스트
+  > 디렉토리명은 `tests/`로 확정한다.
 - 주석/문서화 규칙: 프로젝트 루트 `CLAUDE.md`의 전역 규칙(WHY만 기록, 자명한 내용
   주석 금지)을 그대로 따른다.
 
