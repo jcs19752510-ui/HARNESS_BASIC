@@ -1,0 +1,8 @@
+# 커밋 전 시크릿 유출 방지 (harness_05 §3 "위험 명령 차단" 원칙을 기술적으로 강제)
+# 설치: pip install pre-commit && pre-commit install
+# 설명: docs/attend_env_setup.md §4 참조
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks

@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [PROD_SCH, main]
+
+jobs:
+  secret-scan:
+    name: 시크릿 스캔 (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks 설치 및 실행
+        run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz -o gitleaks.tar.gz
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks detect --source . --no-banner --redact --exit-code 1
+
+  test:
+    name: pytest (TRD §6 기반 테스트)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 의존성 설치
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements.txt 없음 — 아직 구현 전 단계로 간주하고 pytest만 설치"
+          fi
+          pip install pytest
+
+      - name: 테스트 실행 (없으면 통과 처리, 실패는 그대로 실패)
+        run: |
+          set +e
+          pytest -q
+          code=$?
+          set -e
+          if [ $code -eq 5 ]; then
+            echo "수집된 테스트가 아직 없습니다 — 구현 전 단계이므로 통과 처리합니다."
+            exit 0
+          fi
+          exit $code
