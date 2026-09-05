@@ -11,7 +11,7 @@
 
 ```
 main                        ← 항상 배포 가능한 상태만 유지
- └─ feature/{unit-code}      예: feature/a3-attendance-register
+ └─ feature/{unit-code}      예: feature/a3-core-feature
 ```
 
 - 브랜치명 규칙: `feature/{작업지시서 단위코드}`
