@@ -184,7 +184,7 @@ A0 인수인계 §3(편차)는 "몰랐는데 다르게 나온 것"을 기록하�
 | 3 | **저장소 루트 낙서 파일 반복 커밋** | 루트의 `test` 파일(키보드 낙서 텍스트)이 `0655516`부터 최근 커밋까지 5회에 걸쳐 계속 수정·커밋됨 | 🟡 Medium |
 | 4 | **문서가 참조하는 산출물이 실제로 없음(base 기준)** | 마스터 TRD·A1 작업지시서가 `docs/attend_env_setup.md`를 전제조건으로 참조하지만 base 브랜치엔 없음 (→ 위 #1 브랜치에는 존재, 병합만 안 됐을 뿐) | 🟠 High |
 | 5 | **인수인계(A0)·로그 미작성** | A0/A1을 "확정"으로 표시했음에도 `docs/handoff/`, `logs/`가 `.gitkeep`만 있고 실제 인수인계 문서·세션 로그가 base에 전혀 없음 (harness_05 §1 "머지 후 즉시 인수인계 갱신", §5 "세션 로그 보관" 미준수) | 🟠 High |
-| 6 | **개인정보 컬럼 확정 vs 생애주기 정책 미결의 순서 역전** | `attend_a0_datamodel_trd.md`가 `students.contact`/`guardian_contact`를 평문 컬럼으로 이미 "확정"했는데, `attend_requirements_summary.md` §3은 개인정보 보유/마스킹 정책을 여전히 "미결"로 남겨둠 — CLAUDE.md 원칙 8(되돌리기 어려운 결정 금지) 적용 대상이 순서상 늦게 확인됨 | 🟠 High |
+| 6 | **개인정보 컬럼 확정 vs 생애주기 정책 미결의 순서 역전** | `attend_a0_datamodel_trd.md`가 `students.contact`/`guardian_contact`를 평문 컬럼으로 이미 "확정"했는데, `attend_requirements_summary.md` §3은 개인정보 보유/마스킹 정책을 여전히 "미결"로 남겨둠 — CLAUDE.md 원칙 8(되돌리기 어려운 결정 금지) 적용 대상이 순서상 늦게 확인됨 | 🟠 High → ✅ **해소 (2026-09-05)**: 후보 A/B/C 제시 후 사람이 후보 B(목록 마스킹+상세 열람로그, 3년 보존) 선택. `docs/attend_data_lifecycle.md`, ADR-008 참조. 단, TRD에 열람이력 테이블 반영은 아직 미착수(후속 작업) |
 | 7 | **CI가 문서에만 존재** | `harness_05_execution_infra.md` §2가 병합 조건으로 CI 통과를 요구하지만 base의 `.github/workflows/`는 `.gitkeep`뿐. 실제 `ci.yml`은 미병합 `feature/a1-login`에만 있음 | 🟡 Medium |
 
 **공통 원인 추정:** 브랜치 보호 규칙(리뷰 필수 병합)이 실제로 걸려있지 않아, "PR을 만들었지만 일부만 병합"되거나 "로컬에서 브랜치를 오가며 base에 직접 커밋"하는 일이 가능했던 것으로 보임. `harness_05_execution_infra.md` §1의 병합 조건(AC 전부 pass + 사람 리뷰 + CI 통과)을 GitHub 브랜치 보호 규칙으로 강제하는 것이 재발 방지의 핵심.
