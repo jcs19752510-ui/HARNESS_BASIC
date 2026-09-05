@@ -211,5 +211,7 @@ A0 인수인계 §3(편차)는 "몰랐는데 다르게 나온 것"을 기록하�
 - PR 템플릿(`.github/pull_request_template.md`) — 머지 체크리스트(AC 통과/문서 갱신/CI 통과)를 PR 작성 시 강제 상기.
 - `CODEOWNERS` — 리뷰어 강제 지정.
 - "브랜치 삭제 전 병합 완료 확인" 룰 — 이번 8번 사고의 직접 원인이 브랜치 임의 삭제였음.
-- 저장소 상태 자동 헬스체크(예: `.gitignore` 존재, `__pycache__` 커밋 여부, `git merge-base --is-ancestor`로 브랜치가 실제 병합됐는지)를 CI에 추가 — `harness_19_template_validation.md`는 "문서 템플릿 필드" 검증만 다루고 "저장소 상태" 검증은 다루지 않음.
-- harness 메타 문서 자체의 버전/변경 이력을 추적하는 CHANGELOG (`harness_00_overview.md`가 "v1.1"이라 적혀 있지만 그 이력을 보관하는 곳이 없음).
+- ~~저장소 상태 자동 헬스체크~~ → **완료 (2026-09-05)**: `.github/workflows/ci.yml`에 `repo-health` 잡 추가 (`.gitignore` 존재, `__pycache__` 미커밋, PR 대상 브랜치 조상관계로 부분병합 방지)
+- ~~harness 메타 문서 CHANGELOG~~ → **정정**: 이미 `harness_06_meta_improvement.md` §1에 버전 이력 표가 존재했음 (v1.0/v1.1). "없다"는 최초 판단이 틀렸음 — 새로 만들지 않고 그 표에 v1.2 행만 추가함 (원본 재확인 없이 결론 내리면 이런 식으로 틀릴 수 있다는 사례로 기록)
+- ~~PR 템플릿~~ → **완료 (2026-09-05)**: `.github/pull_request_template.md` 추가
+- CODEOWNERS → **보류 결정**: `harness_11_raci.md`가 이미 명시하듯 현재 1인 프로젝트라 리뷰어를 강제 지정할 대상이 없음. 두 번째 실제 리뷰어가 생기는 시점에 재검토 (임의로 자기 자신을 owner로 넣는 건 의미가 없다고 판단)
