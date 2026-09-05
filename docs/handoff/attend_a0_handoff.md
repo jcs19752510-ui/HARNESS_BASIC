@@ -28,7 +28,7 @@
 
 ## §4. 남은 것 / 다음 세션에서 할 일
 - [x] `students.contact`/`guardian_contact`의 보유기간·마스킹·열람권한 정책 확정 — 2026-09-05, ADR-008 (`docs/attend_adr.md`, `docs/attend_data_lifecycle.md`)
-- [ ] **후속**: ADR-008 반영을 위해 `attend_a0_datamodel_trd.md`에 열람 이력 테이블(`contact_view_log`: id, student_id, viewed_by, viewed_at) 추가 — A2 착수 전 필수
+- [x] **후속**: ADR-008 반영 — `attend_a0_datamodel_trd.md`에 열람 이력 테이블(`contact_view_log`) 추가 완료 (2026-09-05). 실제 INSERT 로직 구현은 A2 착수 시 진행
 - [ ] 반이동 처리 화면/절차 확정 (TRD §4에 미결로 명시됨)
 - [ ] 학생 사진(`photo_path`) 저장소 종류(로컬/S3 등) — 기술스택 확정 문서(`harness_13`)와 연동 필요
 

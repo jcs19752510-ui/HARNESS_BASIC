@@ -2,6 +2,10 @@
 
 > harness_01_trd_template.md §1(데이터 구조)의 입력이 되는 상위 설계 문서입니다.
 > ⚠️ 이 문서는 초안입니다. §5 "확정 필요 항목"에 답하신 뒤 최종본으로 반영됩니다.
+>
+> **2026-09-05 갱신**: `contact_view_log` 테이블 추가 (`docs/attend_adr.md` ADR-008 —
+> 학생/보호자 연락처 상세 열람 시 감사 로그 남기기로 결정된 데이터모델 후속 반영,
+> 사람 승인 완료). A2(사용자/학생 관리 화면) 구현 시 이 테이블에 INSERT하는 로직 필수.
 
 ---
 
@@ -59,6 +63,23 @@
 | note | TEXT | 특이사항 |
 | use_yn | CHAR(1) | |
 
+### `contact_view_log` — 학생/보호자 연락처 열람 이력 (감사 추적)
+`docs/attend_adr.md` ADR-008(2026-09-05)에 따라, 목록 화면에서는 연락처를 마스킹하고
+상세 화면에서 전체 번호를 열람할 때마다 아래 이력을 남깁니다. `attendance_history`와
+같은 목적(감사 추적)의 별도 테이블입니다 — 물리 삭제 없음, 파기는 `harness_10`/
+`docs/attend_data_lifecycle.md`의 3년 보존 정책을 따릅니다.
+
+| 컬럼 | 타입 | 설명 |
+|---|---|---|
+| id | PK | |
+| student_id | FK → students | 열람 대상 학생 |
+| viewed_by | FK → users | 열람한 사용자(교사/관리자) |
+| viewed_at | TIMESTAMP | 열람 시각 |
+
+**저장 시점:** 학생 상세 화면(A2 등)에서 `contact`/`guardian_contact` 전체 값을 서버가
+응답에 포함시키는 매 요청마다 INSERT (조회 자체가 열람이므로 화면 클릭과 무관하게 API
+호출 시점 기준).
+
 ### `student_class_history` — 학생-반 소속 이력
 "1년 단위로 전체 바뀌고, 필요시 반이동 존재"를 반영. 학생의 반 소속을
 `students` 테이블에 직접 두지 않고 별도 이력 테이블로 분리합니다.
@@ -114,6 +135,7 @@ classes 1─N student_class_history N─1 students
 students 1─N attendance N─1 classes
 attendance 1─N attendance_history
 users 1─N attendance_history (changed_by)
+students 1─N contact_view_log N─1 users (viewed_by)
 ```
 
 ## 3. 요구사항 정의서와의 대응 확인
@@ -128,6 +150,7 @@ users 1─N attendance_history (changed_by)
 | 동시성(여러 교사) | `attendance_history`로 이력 보존, 저장은 UPSERT |
 | 4단계 권한, 전체 반 개방 | `users.role`만으로 판단, class 단위 필터 없음 |
 | 감사 추적 | `attendance_history` |
+| 연락처 열람 감사(ADR-008) | `contact_view_log` |
 | 소프트삭제만 | 전 테이블에 `use_yn`, 물리 DELETE 없음 |
 
 ## 4. 아직 다루지 않은 것 (다음 TRD에서 결정)
