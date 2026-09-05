@@ -37,4 +37,4 @@
 ## §6. 리스크/미결 정책 (아직 사람의 최종 결정이 안 난 것)
 | 항목 | 현재 임시 기본값 | 결정 필요 시점 |
 |---|---|---|
-| `students.contact`/`guardian_contact` 보유기간·마스킹 여부 | 현재 코드/화면 없음 — 평문 컬럼 스키마만 존재, 실제 노출 로직 없음 | A2(사용자/학생 관리 화면) 착수 전 반드시 확정 (`harness_10_data_lifecycle.md` 연동) |
+| `students.contact`/`guardian_contact` 보유기간·마스킹 여부 | 후보안 3개 작성 완료 → `docs/attend_data_lifecycle.md` §2 참조, 사람 선택 대기 중 (2026-09-05) | A2(사용자/학생 관리 화면) 착수 전 반드시 확정 |
