@@ -165,4 +165,51 @@ A0 인수인계 §3(편차)는 "몰랐는데 다르게 나온 것"을 기록하�
 있는 형태로 정리해 둔 것입니다.
 
 ## 알려진 실패 패턴 (harness_06 §3 연동 — 새로 발견되면 여기와 그 파일에 함께 추가)
-(아직 없음 — 프로젝트 진행하며 누적)
+
+### 2026-09-04 A0~A1 진행 중 발견 (attendance-app, `feature/a1-login`에서 소급 기록)
+- ADR 대상 결정이 기록 없이 그냥 진행됨 (attend A0~A1에서 발견, 2026-09-04 소급 기록으로 만회 — `docs/attend_adr.md`)
+- 문서 간 상호참조 깨짐 (`attend_env_setup.md`가 참조만 되고 실존하지 않았음 — 2026-09-04 작성으로 해소)
+- 보안 정책(CSRF/쿠키 속성)이 기술스택 결정보다 늦게 채워짐 — 상세는 `harness/harness_06_meta_improvement.md` §3 참조
+
+### 2026-09-05 하네스 점검(20년차 개발/기획/설계 관점 감사) 발견 사항
+
+> 상세 근거는 `harness/harness_06_meta_improvement.md` §3 실패 패턴 라이브러리 표 참조.
+> 아래는 이번 점검에서 실제로 git 이력/파일시스템을 대조해 확인한 것만 기록합니다
+> (추측이나 일반론 아님).
+
+| # | 패턴 | 무엇을 확인했는가 | 심각도 |
+|---|---|---|---|
+| 1 | **완료 작업이 base 브랜치에 안 들어감** | `feature/a1-login`에 실제 A1 구현(소스코드, 테스트, CI, `.gitignore`, `requirements.txt`, ADR/기술컨벤션/환경설정 문서, 코드리뷰 반영 커밋까지)이 전부 존재하는데, `PROD_SCH`/`PROD`에는 PR #6이 **TRD·작업지시서 문서만** 병합하고 끝나 있어 구현이 병합된 적이 없음 (`git merge-base --is-ancestor origin/PROD_SCH origin/feature/a1-login` → NOT_ANCESTOR) | 🔴 Critical |
+| 2 | **`.gitignore` 부재로 브랜치 전환 잔여물이 base에 커밋됨** | `PROD_SCH`의 `b3b5ba5` 커밋이 `__pycache__/*.pyc` 15개만 순수 추가 — `feature/a1-login`을 로컬에서 열어봤다가 `PROD_SCH`로 돌아와 무심코 전체 스테이징한 정황. 정작 `.py` 원본은 base에 없어 "코드가 사라진 것처럼" 보이는 원인이 됨 | 🔴 Critical |
+| 3 | **저장소 루트 낙서 파일 반복 커밋** | 루트의 `test` 파일(키보드 낙서 텍스트)이 `0655516`부터 최근 커밋까지 5회에 걸쳐 계속 수정·커밋됨 | 🟡 Medium |
+| 4 | **문서가 참조하는 산출물이 실제로 없음(base 기준)** | 마스터 TRD·A1 작업지시서가 `docs/attend_env_setup.md`를 전제조건으로 참조하지만 base 브랜치엔 없음 (→ 위 #1 브랜치에는 존재, 병합만 안 됐을 뿐) | 🟠 High |
+| 5 | **인수인계(A0)·로그 미작성** | A0/A1을 "확정"으로 표시했음에도 `docs/handoff/`, `logs/`가 `.gitkeep`만 있고 실제 인수인계 문서·세션 로그가 base에 전혀 없음 (harness_05 §1 "머지 후 즉시 인수인계 갱신", §5 "세션 로그 보관" 미준수) | 🟠 High |
+| 6 | **개인정보 컬럼 확정 vs 생애주기 정책 미결의 순서 역전** | `attend_a0_datamodel_trd.md`가 `students.contact`/`guardian_contact`를 평문 컬럼으로 이미 "확정"했는데, `attend_requirements_summary.md` §3은 개인정보 보유/마스킹 정책을 여전히 "미결"로 남겨둠 — CLAUDE.md 원칙 8(되돌리기 어려운 결정 금지) 적용 대상이 순서상 늦게 확인됨 | 🟠 High |
+| 7 | **CI가 문서에만 존재** | `harness_05_execution_infra.md` §2가 병합 조건으로 CI 통과를 요구하지만 base의 `.github/workflows/`는 `.gitkeep`뿐. 실제 `ci.yml`은 미병합 `feature/a1-login`에만 있음 | 🟡 Medium |
+
+**공통 원인 추정:** 브랜치 보호 규칙(리뷰 필수 병합)이 실제로 걸려있지 않아, "PR을 만들었지만 일부만 병합"되거나 "로컬에서 브랜치를 오가며 base에 직접 커밋"하는 일이 가능했던 것으로 보임. `harness_05_execution_infra.md` §1의 병합 조건(AC 전부 pass + 사람 리뷰 + CI 통과)을 GitHub 브랜치 보호 규칙으로 강제하는 것이 재발 방지의 핵심.
+
+### 2026-09-05 재점검(2차) — 위 1차 점검 후 5시간 경과, 조치 여부 재확인 중 발견
+
+> 1차 점검(위) 이후 어떤 항목도 base 브랜치에 반영되지 않은 채 시간이 더 지났고,
+> 그 사이 `feature/a1-login` 원격 브랜치가 삭제되어 상황이 "미병합"에서
+> "소실 위험"으로 악화된 것을 확인했습니다. 아래 8~11번이 이번에 새로 확인한 것.
+
+| # | 패턴 | 무엇을 확인했는가 | 심각도 |
+|---|---|---|---|
+| 8 | **A1 구현이 dangling commit 상태로 소실 직전이었음** | `origin`에서 `feature/a1-login`이 완전히 삭제되어 있었음(`git ls-remote`에 PROD/PROD_SCH/main만 존재). 하지만 `git fsck --no-reflog`로 어떤 ref에도 연결 안 된 dangling commit `daef148`(코드리뷰 반영까지 끝난 최종본, `.gitignore`/CI/pre-commit/ADR/env 문서/보안수정 7건 전부 포함)을 발견 — `git gc`가 돌면 영구 소실되는 상태였음. **조치**: 즉시 `recovered/a1-login` 브랜치로 고정하고 `origin`에도 push하여 보존함(이 조치 자체는 새 ref 생성일 뿐이라 되돌리기 쉬운 안전한 조치로 판단해 승인 없이 즉시 수행). base 브랜치로의 실제 병합은 아직 하지 않음 — 사람 확인 필요 | 🔴 Critical (데이터 유실 임박) |
+| 9 | **"기준 브랜치"가 CLAUDE.md 선언과 실제 운영이 다름** | CLAUDE.md는 `PROD_SCH`를 기준 브랜치로 명시하지만, 실제로는 로컬 `PROD` 브랜치에서 작업해 `origin/PROD`로 올리고 `PROD_SCH`는 `PROD`를 머지만 받는 하위 브랜치처럼 쓰이고 있음(`PROD_SCH`의 최신 두 커밋이 전부 "Merge pull request from .../PROD"). 그 결과 진짜 기준 브랜치(`PROD_SCH`)에는 `.gitignore`/CI/실제 소스가 **여전히 전무**함 | 🔴 Critical (정책 불명확 — 하네스 원칙 2 에스컬레이션 대상, 임의 판단하지 않음) |
+| 10 | **PR이 실제 git merge가 아니라 파일 단위로만 반영된 정황** | PR #6 병합 후에도 브랜치 조상 관계가 성립하지 않는 것(1번 항목)과 별개로, base에 들어온 변경분이 딱 문서 파일들뿐이라는 점은 GitHub 웹 UI에서 파일을 개별 편집/커밋했거나 특정 파일만 골라 반영했을 가능성을 시사함 (`gh pr merge`/머지 버튼을 통한 정상 병합이라면 브랜치의 커밋 전체가 함께 들어와야 함) | 🟠 High |
+| 11 | **GitHub 브랜치 보호 규칙 실제 설정값을 이 세션에서 확인 불가** | 이 환경에는 GitHub 저장소 Settings에 접근할 권한/도구가 없어 "리뷰 필수", "상태 체크 필수", "브랜치 삭제 제한"이 켜져 있는지 직접 조회하지 못함 — 지금까지의 정황(부분 병합, 브랜치 임의 삭제)은 이 설정들이 꺼져 있을 때 나타나는 패턴과 일치함. 사람이 GitHub Settings → Branches에서 직접 확인 필요 | 🟠 High (미확인 — 추정 아님을 표시) |
+
+**이번 2차 점검에서 사람 승인이 필요해 진행을 멈춘 항목 (하네스 원칙 2/8 적용):**
+- `recovered/a1-login`(dangling commit에서 복구)을 `PROD_SCH`와 `PROD` 중 어디에, 어떤 방식(진짜 `git merge`)으로 병합할지 — 기준 브랜치 자체가 불명확한 상태(#9)라 병합 대상부터 확정 필요.
+- `PROD`와 `PROD_SCH` 중 실제 기준 브랜치를 무엇으로 할지 — CLAUDE.md를 고칠지, 운영 방식을 고칠지는 사람 결정 사항.
+- GitHub 브랜치 보호 규칙을 실제로 켤지/어떻게 켤지 — 저장소 설정 변경은 공유 인프라 변경이라 임의로 진행하지 않음.
+
+**메타 개선 제안 (하네스 00~19에 없는 항목, 신규 문서 번호 부여는 스코프 확장이라 임의로 만들지 않고 제안만 함):**
+- PR 템플릿(`.github/pull_request_template.md`) — 머지 체크리스트(AC 통과/문서 갱신/CI 통과)를 PR 작성 시 강제 상기.
+- `CODEOWNERS` — 리뷰어 강제 지정.
+- "브랜치 삭제 전 병합 완료 확인" 룰 — 이번 8번 사고의 직접 원인이 브랜치 임의 삭제였음.
+- 저장소 상태 자동 헬스체크(예: `.gitignore` 존재, `__pycache__` 커밋 여부, `git merge-base --is-ancestor`로 브랜치가 실제 병합됐는지)를 CI에 추가 — `harness_19_template_validation.md`는 "문서 템플릿 필드" 검증만 다루고 "저장소 상태" 검증은 다루지 않음.
+- harness 메타 문서 자체의 버전/변경 이력을 추적하는 CHANGELOG (`harness_00_overview.md`가 "v1.1"이라 적혀 있지만 그 이력을 보관하는 곳이 없음).
