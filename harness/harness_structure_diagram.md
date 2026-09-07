@@ -1,13 +1,13 @@
 # 하네스 시스템 전체 구조도
 
-> 이 문서는 `harness/` 21종 문서의 전체 구조를 한눈에 보기 위한 시각 자료입니다.
+> 이 문서는 `harness/` 22종 문서의 전체 구조를 한눈에 보기 위한 시각 자료입니다.
 > 각 문서의 상세 내용은 해당 `harness_NN_*.md` 파일을, "왜 필요한가"는
 > 루트 `CLAUDE.md` "확장 문서" 섹션을 참조하세요. 이 저장소는 도메인
 > 중립이므로, 아래 다이어그램도 특정 업무 프로그램과 무관한 범용 구조입니다.
 
 ---
 
-## 1. 전체 레이어 구조 (문서 21종 배치)
+## 1. 전체 레이어 구조 (문서 22종 배치)
 
 프로젝트 생애주기를 "거버넌스 백본 + 5개 레이어"로 나눠 문서를 배치합니다.
 화살표는 레이어 간 진행 순서, 점선은 회고 루프를 뜻합니다.
@@ -30,6 +30,7 @@ flowchart TD
         D1["08_adr<br/>아키텍처 결정 기록"]
         D2["13_tech_conventions<br/>전역 기술 컨벤션"]
         D3["10_data_lifecycle<br/>개인정보 생애주기 정책"]
+        D4["21_ux_design_process<br/>UX/디자인 프로세스"]
     end
 
     subgraph L3["⚙️ 실행 — AI에게 위임하고 검증"]
@@ -65,7 +66,7 @@ flowchart TD
     classDef meta fill:#be185d,color:#fff,stroke:#9d174d
     class B1,B2,B3 backbone
     class F1,F2,F3 plan
-    class D1,D2,D3 design
+    class D1,D2,D3,D4 design
     class E1,E2,E3,E4,E5,E6 exec
     class O1,O2,O3,O4 ops
     class M1,M2,M3 meta
@@ -79,14 +80,15 @@ Phase A는 프로젝트당 1회, Phase B는 실행 단위 수만큼 반복, Phas
 
 ```mermaid
 flowchart TD
-    Start(["프로젝트 착수"]) --> A1["Phase A-1<br/>요구사항 + 비기능요구사항 정의<br/>(동시성·권한·감사·개인정보)"]
-    A1 --> A2["Phase A-2<br/>데이터 모델(ERD) 확정<br/>→ 08_adr에 근거 기록"]
-    A2 --> A3["Phase A-3<br/>전역 기술 컨벤션 확정<br/>→ 13_tech_conventions"]
-    A3 --> A4["Phase A-4<br/>마스터 TRD 작성"]
-    A4 --> A5["Phase A-5<br/>릴리스 우선순위 확정<br/>→ 07_release_planning(MoSCoW)"]
-    A5 --> A6["Phase A-6<br/>위험도+가치 기준<br/>실행 단위 순서 확정"]
+    Start(["프로젝트 착수"]) --> A1["Phase A-1<br/>요구사항 + 비기능요구사항 정의<br/>(동시성·권한·감사·개인정보·성능·보안)"]
+    A1 --> A2["Phase A-2<br/>화면설계 확정<br/>(IA/와이어프레임, 사람 승인)"]
+    A2 --> A3["Phase A-3<br/>데이터 모델(ERD) 확정<br/>→ 08_adr에 근거 기록"]
+    A3 --> A4["Phase A-4<br/>전역 기술 컨벤션 확정<br/>→ 13_tech_conventions"]
+    A4 --> A5["Phase A-5<br/>마스터 TRD 작성"]
+    A5 --> A6["Phase A-6<br/>릴리스 우선순위 확정<br/>→ 07_release_planning(MoSCoW, 위험도채점 §3-1)"]
+    A6 --> A7["Phase A-7<br/>위험도+가치 기준<br/>실행 단위 순서 확정"]
 
-    A6 --> Loop{{"Phase B<br/>단위별 실행 루프<br/>(단위 수만큼 반복)"}}
+    A7 --> Loop{{"Phase B<br/>단위별 실행 루프<br/>(단위 수만큼 반복)"}}
     Loop --> B1["B-1 단위 TRD 세부 스펙<br/>01_trd_template"]
     B1 --> B2["B-2 AC/테스트케이스 확정<br/>(코드 작성 전 필수)"]
     B2 --> B3["B-3 작업지시서 작성<br/>02_work_order_template"]
@@ -115,8 +117,10 @@ Phase B(단위별 실행 루프) 안에서 문서가 실제로 어떻게 서로 
 ```mermaid
 flowchart LR
     REQ["요구사항 정의서<br/>(사람 작성)"] --> ADR["08_adr<br/>(사람 승인)"]
+    REQ --> SCREEN["화면설계 산출물<br/>IA/와이어프레임(사람 승인)"]
     REQ --> TRD0["A0 데이터모델 TRD<br/>(사람 확정)"]
     TRD0 --> MTRD["마스터 TRD<br/>(사람 작성)"]
+    SCREEN --> MTRD
     ADR --> MTRD
     TC["13_tech_conventions<br/>(사람 확정)"] --> MTRD
     MTRD --> UTRD["단위 TRD + AC<br/>(AI 초안 → 사람 확정)"]
@@ -133,7 +137,7 @@ flowchart LR
     classDef human fill:#1e7d34,color:#fff,stroke:#145a24
     classDef ai fill:#2563eb,color:#fff,stroke:#1e3a8a
     classDef gate fill:#b91c1c,color:#fff,stroke:#7f1d1d
-    class REQ,TRD0,MTRD,TC,WO human
+    class REQ,TRD0,MTRD,TC,WO,SCREEN human
     class AI,PROMPT ai
     class REVIEW gate
 ```
@@ -183,6 +187,7 @@ flowchart TD
 | `18_cost_tracking` | 비용·시간 추적 | 메타 | 🟢 Nice |
 | `19_template_validation` | 템플릿 검증 체크 | 메타 | 🟢 Nice |
 | `20_backup_dr` | 백업·재해복구 정책 | 운영 | 🔴 Critical |
+| `21_ux_design_process` | UX/디자인 프로세스 | 설계 | 🔴 Critical |
 
 **최소 시작 경로**: 급하고 작은 프로젝트라면 `00_overview → 01 → 02 → 05` 네 개만
 읽고 시작해도 됩니다. 나머지는 위 §1 지도 순서대로 필요할 때 끌어다 쓰면 됩니다.
