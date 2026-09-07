@@ -79,14 +79,15 @@ Phase A는 프로젝트당 1회, Phase B는 실행 단위 수만큼 반복, Phas
 
 ```mermaid
 flowchart TD
-    Start(["프로젝트 착수"]) --> A1["Phase A-1<br/>요구사항 + 비기능요구사항 정의<br/>(동시성·권한·감사·개인정보)"]
-    A1 --> A2["Phase A-2<br/>데이터 모델(ERD) 확정<br/>→ 08_adr에 근거 기록"]
-    A2 --> A3["Phase A-3<br/>전역 기술 컨벤션 확정<br/>→ 13_tech_conventions"]
-    A3 --> A4["Phase A-4<br/>마스터 TRD 작성"]
-    A4 --> A5["Phase A-5<br/>릴리스 우선순위 확정<br/>→ 07_release_planning(MoSCoW)"]
-    A5 --> A6["Phase A-6<br/>위험도+가치 기준<br/>실행 단위 순서 확정"]
+    Start(["프로젝트 착수"]) --> A1["Phase A-1<br/>요구사항 + 비기능요구사항 정의<br/>(동시성·권한·감사·개인정보·성능·보안)"]
+    A1 --> A2["Phase A-2<br/>화면설계 확정<br/>(IA/와이어프레임, 사람 승인)"]
+    A2 --> A3["Phase A-3<br/>데이터 모델(ERD) 확정<br/>→ 08_adr에 근거 기록"]
+    A3 --> A4["Phase A-4<br/>전역 기술 컨벤션 확정<br/>→ 13_tech_conventions"]
+    A4 --> A5["Phase A-5<br/>마스터 TRD 작성"]
+    A5 --> A6["Phase A-6<br/>릴리스 우선순위 확정<br/>→ 07_release_planning(MoSCoW, 위험도채점 §3-1)"]
+    A6 --> A7["Phase A-7<br/>위험도+가치 기준<br/>실행 단위 순서 확정"]
 
-    A6 --> Loop{{"Phase B<br/>단위별 실행 루프<br/>(단위 수만큼 반복)"}}
+    A7 --> Loop{{"Phase B<br/>단위별 실행 루프<br/>(단위 수만큼 반복)"}}
     Loop --> B1["B-1 단위 TRD 세부 스펙<br/>01_trd_template"]
     B1 --> B2["B-2 AC/테스트케이스 확정<br/>(코드 작성 전 필수)"]
     B2 --> B3["B-3 작업지시서 작성<br/>02_work_order_template"]
@@ -115,8 +116,10 @@ Phase B(단위별 실행 루프) 안에서 문서가 실제로 어떻게 서로 
 ```mermaid
 flowchart LR
     REQ["요구사항 정의서<br/>(사람 작성)"] --> ADR["08_adr<br/>(사람 승인)"]
+    REQ --> SCREEN["화면설계 산출물<br/>IA/와이어프레임(사람 승인)"]
     REQ --> TRD0["A0 데이터모델 TRD<br/>(사람 확정)"]
     TRD0 --> MTRD["마스터 TRD<br/>(사람 작성)"]
+    SCREEN --> MTRD
     ADR --> MTRD
     TC["13_tech_conventions<br/>(사람 확정)"] --> MTRD
     MTRD --> UTRD["단위 TRD + AC<br/>(AI 초안 → 사람 확정)"]
@@ -133,7 +136,7 @@ flowchart LR
     classDef human fill:#1e7d34,color:#fff,stroke:#145a24
     classDef ai fill:#2563eb,color:#fff,stroke:#1e3a8a
     classDef gate fill:#b91c1c,color:#fff,stroke:#7f1d1d
-    class REQ,TRD0,MTRD,TC,WO human
+    class REQ,TRD0,MTRD,TC,WO,SCREEN human
     class AI,PROMPT ai
     class REVIEW gate
 ```
