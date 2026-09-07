@@ -56,6 +56,14 @@ jobs:
       - name: 의존성 취약점 스캔 실행
         run: echo "프로젝트 스택 확정 후 채우기 (예: npm audit / pip-audit / osv-scanner)"
 
+  lint:
+    name: 정적 분석/포맷팅/타입체크 (스택 확정 후 구체화 — harness_13_tech_conventions.md §4 참조)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: lint/format/type-check 실행
+        run: echo "프로젝트 스택 확정 후 채우기 (예: eslint+prettier / ruff+mypy)"
+
   test:
     name: TRD §6 기반 테스트 (스택 확정 후 구체화)
     runs-on: ubuntu-latest
