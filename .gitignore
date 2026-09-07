@@ -23,7 +23,7 @@ node_modules/
 logs/*
 !logs/.gitkeep
 
-# 학생 사진 등 업로드 산출물 (실제 데이터는 리포지토리에 들어가지 않음)
+# 사용자 업로드 산출물 (실제 데이터는 리포지토리에 들어가지 않음)
 uploads/
 media/
 

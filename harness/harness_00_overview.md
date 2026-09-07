@@ -69,7 +69,8 @@ AI 에이전트(Claude Code 등)에게 개발 작업을 위임할 때, **자율�
 
 - 영문/숫자만 사용 (한글·공백 섞인 파일명은 일부 환경에서 열림 문제 발생 이력 있음)
 - 형식: `{프로젝트코드}_{단계코드}_{문서유형}.md`
-  - 예: `attend_a3_trd.md`, `attend_a3_workorder.md`, `attend_a0_handoff.md`
+  - 예: `{project}_a3_trd.md`, `{project}_a3_workorder.md`, `{project}_a0_handoff.md`
+    (`{project}`는 프로젝트별 짧은 영문 코드로 착수 시 정함)
 - 문서유형 약어: `trd`(스펙), `workorder`(작업지시서), `handoff`(인수인계), `prompt`(생성된 프롬프트)
 
 ## 6. 품질 게이트 체크리스트 (매 단위 완료 시 확인)
