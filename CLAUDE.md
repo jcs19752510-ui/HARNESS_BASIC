@@ -80,6 +80,21 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - 브랜치는 base에 실제로 병합된 것을 확인(`git merge-base --is-ancestor`)한
   뒤에만 삭제한다 (`.github/pull_request_template.md` 체크리스트 참조).
 
+## 선택적 도구 — Claude Code Skill/Subagent (`.claude/`) (2026-09-08 추가)
+
+`.claude/skills/`와 `.claude/agents/`에 Claude Code 전용 가속 도구 4종이
+있습니다: `harness-prompt-gen`(harness_04 조합 자동화), `harness-validate`
+(harness_19 검증 자동화), `harness-reviewer`(harness_05 §3 독립 리뷰
+서브에이전트), `harness-worktree`(harness_15 병렬작업 명령 안내).
+
+**이것들은 전부 선택 사항입니다.** 이 하네스는 "AI 에이전트(Claude Code 등)"
+라고 도구 중립적으로 설계됐고(`harness_00_overview.md §1`), 위 4개 도구가
+없어도 각 `harness_NN_*.md` 문서만으로 SOP 전체가 완결됩니다. Claude Code가
+아닌 다른 도구를 쓰는 프로젝트는 `.claude/` 폴더를 그냥 무시하면 됩니다 —
+이 폴더의 존재가 하네스 본체(`harness/` 22개 문서)의 도구 중립성을 해치지
+않습니다. 각 도구는 해당 harness 문서 안에 "(선택) Claude Code 사용자" 로
+표시된 지점에서 안내합니다.
+
 ## 참고 문서 경로
 
 ### 기본 문서 (00~06)
