@@ -1,0 +1,6 @@
+{
+  "name": "harness-tools",
+  "description": "하네스 시스템(harness/harness_00~21) 전용 가속 도구 4종 — harness-prompt-gen(프롬프트 6블록 자동조합), harness-validate(필수필드/AC모호성 자동검증), harness-worktree(병렬작업 git worktree 명령 안내), harness-reviewer(독립 diff 리뷰 서브에이전트). 전부 선택 사항이며, harness/ 문서 20여종이 이 도구 없이도 완결되도록 설계되어 있습니다. harness/harness_00_definition.md를 기반으로 한 프로젝트라면 어디든 설치해 쓸 수 있습니다.",
+  "version": "1.0.0",
+  "author": { "name": "HARNESS_BASIC" }
+}

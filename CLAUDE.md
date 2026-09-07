@@ -80,6 +80,37 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - 브랜치는 base에 실제로 병합된 것을 확인(`git merge-base --is-ancestor`)한
   뒤에만 삭제한다 (`.github/pull_request_template.md` 체크리스트 참조).
 
+## 선택적 도구 — Claude Code Skill/Subagent (`.claude/`) (2026-09-08 추가)
+
+`.claude/skills/`와 `.claude/agents/`에 Claude Code 전용 가속 도구 4종이
+있습니다: `harness-prompt-gen`(harness_04 조합 자동화), `harness-validate`
+(harness_19 검증 자동화), `harness-reviewer`(harness_05 §3 독립 리뷰
+서브에이전트), `harness-worktree`(harness_15 병렬작업 명령 안내).
+
+**이것들은 전부 선택 사항입니다.** 이 하네스는 "AI 에이전트(Claude Code 등)"
+라고 도구 중립적으로 설계됐고(`harness_00_overview.md §1`), 위 4개 도구가
+없어도 각 `harness_NN_*.md` 문서만으로 SOP 전체가 완결됩니다. Claude Code가
+아닌 다른 도구를 쓰는 프로젝트는 `.claude/` 폴더를 그냥 무시하면 됩니다 —
+이 폴더의 존재가 하네스 본체(`harness/` 22개 문서)의 도구 중립성을 해치지
+않습니다. 각 도구는 해당 harness 문서 안에 "(선택) Claude Code 사용자" 로
+표시된 지점에서 안내합니다.
+
+**추가로 있는 것 (2026-09-08):**
+- `plugins/harness-tools/` — 위 4개 도구(스킬 3개+서브에이전트 1개)를
+  Claude Code Plugin 형식으로 묶어둔 배포용 사본입니다. 이 템플릿에서
+  시작하지 않은 다른 저장소에도 `--plugin-dir` 또는 마켓플레이스로 나중에
+  얹을 수 있습니다. **도메인중립 감지 훅은 여기 포함하지 않았습니다** —
+  그 훅은 이 저장소 자신(`docs/`, `src/`, `tests/`가 항상 비어야 함)에만
+  의미가 있고, 이 하네스를 실제로 쓰는 프로젝트에는 오히려 오탐만 냅니다.
+- `.claude/hooks/check-domain-neutral.sh` + `.claude/settings.json` —
+  `harness/*.md`·`docs/`·`src/`·`tests/`에 Write/Edit가 일어날 때마다
+  자동으로 도는 경고용 훅(차단 아님, 참고 알림만). 완전한 도메인 탐지기가
+  아니라, 이 저장소에서 실제로 검증 가능한 두 가지(빈 골격 구조 규칙 위반,
+  과거 실제로 재발했던 특정 문구의 재발)만 잡습니다.
+- 클라우드 routine("HARNESS_BASIC 주간 감사", `harness_16 §3` 참고) — 매주
+  월요일 읽기 전용으로 기술부채 기한 초과·도메인중립 구조 위반을 감사합니다.
+  `claude.ai/code/routines`에서 확인/수정/중지 가능합니다.
+
 ## 참고 문서 경로
 
 ### 기본 문서 (00~06)
