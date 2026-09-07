@@ -14,7 +14,7 @@ AI가 실행할지"의 경계선을 문서와 절차로 미리 고정해 둔 **�
 | 전체 구조를 다이어그램으로 | [`harness/harness_structure_diagram.md`](harness/harness_structure_diagram.md) |
 | Claude Code 세션 지침(원칙/규칙) | [`CLAUDE.md`](CLAUDE.md) |
 | SOP 및 타협 불가 8원칙 | [`harness/harness_00_overview.md`](harness/harness_00_overview.md) |
-| 문서 20종 전체 목록 | `harness/harness_00_definition.md` §3 |
+| 문서 21종 전체 목록 | `harness/harness_00_definition.md` §3 |
 
 ## 이 저장소를 실제 프로젝트에 연결하는 방법
 

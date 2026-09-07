@@ -1,13 +1,13 @@
 # 하네스 시스템 전체 구조도
 
-> 이 문서는 `harness/` 20종 문서의 전체 구조를 한눈에 보기 위한 시각 자료입니다.
+> 이 문서는 `harness/` 21종 문서의 전체 구조를 한눈에 보기 위한 시각 자료입니다.
 > 각 문서의 상세 내용은 해당 `harness_NN_*.md` 파일을, "왜 필요한가"는
 > 루트 `CLAUDE.md` "확장 문서" 섹션을 참조하세요. 이 저장소는 도메인
 > 중립이므로, 아래 다이어그램도 특정 업무 프로그램과 무관한 범용 구조입니다.
 
 ---
 
-## 1. 전체 레이어 구조 (문서 20종 배치)
+## 1. 전체 레이어 구조 (문서 21종 배치)
 
 프로젝트 생애주기를 "거버넌스 백본 + 5개 레이어"로 나눠 문서를 배치합니다.
 화살표는 레이어 간 진행 순서, 점선은 회고 루프를 뜻합니다.
@@ -43,6 +43,7 @@ flowchart TD
 
     subgraph L4["🚀 운영 — 세상에 내놓고 지키기"]
         O1["09_deployment_runbook<br/>배포·롤백 절차"]
+        O4["20_backup_dr<br/>백업·재해복구(DR)"]
         O2["17_monitoring<br/>모니터링·알림"]
         O3["16_tech_debt_log<br/>기술부채 로그"]
     end
@@ -66,7 +67,7 @@ flowchart TD
     class F1,F2,F3 plan
     class D1,D2,D3 design
     class E1,E2,E3,E4,E5,E6 exec
-    class O1,O2,O3 ops
+    class O1,O2,O3,O4 ops
     class M1,M2,M3 meta
 ```
 
@@ -181,6 +182,7 @@ flowchart TD
 | `17_monitoring` | 모니터링·알림 | 운영 | 🟢 Nice |
 | `18_cost_tracking` | 비용·시간 추적 | 메타 | 🟢 Nice |
 | `19_template_validation` | 템플릿 검증 체크 | 메타 | 🟢 Nice |
+| `20_backup_dr` | 백업·재해복구 정책 | 운영 | 🔴 Critical |
 
 **최소 시작 경로**: 급하고 작은 프로젝트라면 `00_overview → 01 → 02 → 05` 네 개만
 읽고 시작해도 됩니다. 나머지는 위 §1 지도 순서대로 필요할 때 끌어다 쓰면 됩니다.
