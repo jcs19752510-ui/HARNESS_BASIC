@@ -11,7 +11,7 @@ jobs:
     name: 저장소 상태 점검 (harness_19 보완 — 문서 템플릿이 아닌 저장소 상태 자체 검증)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -40,7 +40,7 @@ jobs:
     name: 시크릿 스캔 (gitleaks)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       # 공식 GitHub Action을 태그가 아닌 커밋 SHA로 고정 — 태그 재사용(bait-and-switch)
@@ -56,7 +56,7 @@ jobs:
     name: 의존성 취약점 스캔 (스택 확정 후 구체화 — harness_13_tech_conventions.md §7 참조)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: 의존성 취약점 스캔 실행
         run: |
           echo "⚠️ 아직 미구성 상태입니다. harness_13_tech_conventions.md §7을 확정한 뒤"
@@ -67,7 +67,7 @@ jobs:
     name: 정적 분석/포맷팅/타입체크 (스택 확정 후 구체화 — harness_13_tech_conventions.md §4 참조)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: lint/format/type-check 실행
         run: |
           echo "⚠️ 아직 미구성 상태입니다. harness_13_tech_conventions.md §4를 확정한 뒤"
@@ -78,7 +78,7 @@ jobs:
     name: TRD §6 기반 테스트 (스택 확정 후 구체화)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: 의존성 설치 및 테스트 실행
         run: |
           echo "⚠️ 아직 미구성 상태입니다. harness_13_tech_conventions.md를 참조해 프로젝트"
