@@ -1,0 +1,27 @@
+# Dependabot 설정 — harness_13_tech_conventions.md §7 "의존성/공급망 보안" 참조
+#
+# github-actions 항목은 스택과 무관하게 항상 유효해서 지금 바로 켜뒀습니다
+# (이 저장소의 .github/workflows/ci.yml이 쓰는 actions/checkout, gitleaks-action
+# 등의 새 버전이 나오면 자동으로 PR을 만들어 알려줍니다).
+#
+# npm/pip 등 애플리케이션 의존성 스캔은 Phase A에서 기술스택을 확정한 뒤,
+# 아래 예시 중 실제 쓰는 것의 주석을 해제하고 나머지는 지우세요.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Node/npm 예시 (스택 확정 후 주석 해제)
+  # - package-ecosystem: "npm"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+
+  # Python/pip 예시 (스택 확정 후 주석 해제)
+  # - package-ecosystem: "pip"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"

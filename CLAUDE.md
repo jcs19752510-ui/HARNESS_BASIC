@@ -29,6 +29,13 @@
 - 사람이 처음 방문했을 때 보는 진입점은 루트 `README.md`입니다. 이 파일과
   내용이 어긋나면 안 되므로, 아래 원칙/구조를 바꿀 때는 `README.md`도
   함께 갱신하세요.
+- **이 저장소(`HARNESS_BASIC`) 자체의 기준(base) 브랜치는 `PROD_SCH`입니다**
+  (2026-09-08 확인 및 선언 — `harness_06_meta_improvement.md` §3 "기준 브랜치
+  선언과 실제 운영 불일치" 패턴 재발 방지 목적). PR/병합 대상이 항상 이
+  브랜치와 일치하는지 확인하세요. 이 선언에 맞춰 `.github/workflows/ci.yml`의
+  `on.pull_request.branches`도 `PROD_SCH`로 함께 맞춰 두었습니다 — 둘 중
+  하나만 바뀌고 다른 하나가 안 바뀌면 CI가 조용히 트리거되지 않는 사고로
+  이어지니, 이 브랜치명을 바꿀 일이 생기면 반드시 두 곳을 함께 수정하세요.
 
 ## 저장소 연결 방식 — 이 저장소를 실제 프로젝트에 어떻게 쓰는가 (2026-09-05 결정)
 
@@ -44,11 +51,18 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - git submodule/subtree로 여러 프로젝트가 참조 → 복잡도 대비 이득이
   적음(1인/소규모 프로젝트엔 과함)
 
-새 저장소 생성 후 할 일: 그 저장소의 `CLAUDE.md` "프로젝트 개요"를 실제
-프로젝트 설명으로 교체(하네스 원칙 8개와 이 "Git 관련 작업 금지" 규칙은
-그대로 유지), 이후 `harness_00_definition.md` §4 Phase A부터 순서대로
-진행. 같은 내용이 `README.md`와 `harness_00_definition.md` 양쪽에도
-동일하게 안내돼 있습니다.
+새 저장소 생성 후 할 일:
+1. 그 저장소의 `CLAUDE.md` "프로젝트 개요"를 실제 프로젝트 설명으로 교체
+   (하네스 원칙 8개와 이 "Git 관련 작업 금지" 규칙은 그대로 유지)
+2. `.claude/hooks/check-domain-neutral.sh`와 `.claude/settings.json`의
+   해당 훅 설정을 삭제(또는 비활성화)할지 검토 — 이 훅은 HARNESS_BASIC
+   저장소 자신이 계속 빈 골격을 유지하는지 감시하는 용도라, 실제
+   프로젝트에서는 `docs/trd/` 등에 진짜 파일을 쓸 때마다 오탐(false
+   positive) 경고만 발생시킵니다.
+3. `harness/harness_00_definition.md` §4 Phase A부터 순서대로 진행
+
+같은 내용이 `README.md`와 `harness_00_definition.md` 양쪽에도 동일하게
+안내돼 있습니다.
 
 ## 하네스 원칙 (harness/harness_00_overview.md 기반, 반드시 준수)
 
@@ -122,6 +136,10 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - 프롬프트 생성 규칙: `harness/harness_04_prompt_generator_template.md`
 - 실행 인프라(브랜치/CI/권한/에스컬레이션): `harness/harness_05_execution_infra.md`
 - 회고 및 실패 패턴 라이브러리: `harness/harness_06_meta_improvement.md`
+- 취약점 신고 정책: `SECURITY.md` (루트) — 이 저장소 자체와 이 템플릿으로
+  만든 실제 프로젝트를 구분해서 다룸
+- 리뷰어 강제 지정(비활성 템플릿): `.github/CODEOWNERS`
+- 의존성 자동 업데이트: `.github/dependabot.yml` (github-actions만 즉시 활성)
 
 ### 확장 문서 (v1.1 — 2026-09-04 갭 분석으로 추가)
 - 🔴 릴리스/우선순위 계획: `harness/harness_07_release_planning.md`
