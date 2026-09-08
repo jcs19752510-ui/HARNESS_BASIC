@@ -31,7 +31,11 @@ AI가 실행할지"의 경계선을 문서와 절차로 미리 고정해 둔 **�
    새 저장소 생성 (harness 전체가 그대로 복사되어 시작)
 3. 새 저장소의 `CLAUDE.md` "프로젝트 개요"를 실제 프로젝트 설명으로
    교체 (하네스 원칙 8개와 Git 작업 관련 규칙은 그대로 유지)
-4. `harness/harness_00_definition.md` §4의 Phase A부터 순서대로 진행
+4. `.claude/hooks/check-domain-neutral.sh`와 `.claude/settings.json`의
+   해당 훅 설정을 삭제(또는 비활성화)할지 검토 — 이 훅은 HARNESS_BASIC
+   저장소 자신이 계속 빈 골격을 유지하는지 감시하는 용도라, 실제
+   프로젝트에서는 오탐만 냅니다
+5. `harness/harness_00_definition.md` §4의 Phase A부터 순서대로 진행
 
 이 방식(A안)을 선택한 이유와 대안(수동 복사/submodule)은
 [`CLAUDE.md`](CLAUDE.md) "저장소 연결 방식" 섹션에 동일하게 설명돼

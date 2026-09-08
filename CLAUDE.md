@@ -51,11 +51,18 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - git submodule/subtree로 여러 프로젝트가 참조 → 복잡도 대비 이득이
   적음(1인/소규모 프로젝트엔 과함)
 
-새 저장소 생성 후 할 일: 그 저장소의 `CLAUDE.md` "프로젝트 개요"를 실제
-프로젝트 설명으로 교체(하네스 원칙 8개와 이 "Git 관련 작업 금지" 규칙은
-그대로 유지), 이후 `harness_00_definition.md` §4 Phase A부터 순서대로
-진행. 같은 내용이 `README.md`와 `harness_00_definition.md` 양쪽에도
-동일하게 안내돼 있습니다.
+새 저장소 생성 후 할 일:
+1. 그 저장소의 `CLAUDE.md` "프로젝트 개요"를 실제 프로젝트 설명으로 교체
+   (하네스 원칙 8개와 이 "Git 관련 작업 금지" 규칙은 그대로 유지)
+2. `.claude/hooks/check-domain-neutral.sh`와 `.claude/settings.json`의
+   해당 훅 설정을 삭제(또는 비활성화)할지 검토 — 이 훅은 HARNESS_BASIC
+   저장소 자신이 계속 빈 골격을 유지하는지 감시하는 용도라, 실제
+   프로젝트에서는 `docs/trd/` 등에 진짜 파일을 쓸 때마다 오탐(false
+   positive) 경고만 발생시킵니다.
+3. `harness/harness_00_definition.md` §4 Phase A부터 순서대로 진행
+
+같은 내용이 `README.md`와 `harness_00_definition.md` 양쪽에도 동일하게
+안내돼 있습니다.
 
 ## 하네스 원칙 (harness/harness_00_overview.md 기반, 반드시 준수)
 
