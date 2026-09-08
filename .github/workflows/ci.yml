@@ -1,9 +1,10 @@
 name: CI
 
 on:
-  # 프로젝트 착수 시 실제 기준(base) 브랜치명으로 교체하세요 (CLAUDE.md에 선언한 것과 일치시킬 것)
+  # 기준(base) 브랜치: CLAUDE.md "프로젝트 개요"에 선언된 PROD_SCH와 일치시킬 것
+  # (이 브랜치명을 바꾸면 CLAUDE.md의 선언도 반드시 함께 수정)
   pull_request:
-    branches: [main]
+    branches: [PROD_SCH]
 
 jobs:
   repo-health:
