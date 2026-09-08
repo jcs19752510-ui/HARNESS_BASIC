@@ -1,0 +1,20 @@
+# CODEOWNERS — 리뷰어 강제 지정
+#
+# harness_19_template_validation.md §4에 따르면, 1인 프로젝트에서는 이 파일이
+# 비활성 상태(아래 예시가 전부 주석 처리된 상태)여도 됩니다 — 리뷰어가 자기
+# 자신뿐이면 강제 지정이 의미가 없기 때문입니다.
+#
+# 두 번째 리뷰어가 합류하는 순간, 아래 예시의 "#"를 지우고 실제 GitHub
+# 사용자명/팀명으로 교체해서 활성화하세요. 이 파일이 활성화되면 GitHub이
+# 아래 패턴에 해당하는 파일이 변경된 PR에 지정된 사람/팀을 리뷰어로
+# 자동 지정합니다 (브랜치 보호 규칙에서 "Require review from Code Owners"를
+# 함께 켜야 실제로 강제됩니다 — harness_05_execution_infra.md §1 참조).
+#
+# 문법: <경로 패턴> <@사용자명 또는 @조직/팀명 1개 이상>
+
+# 예시 (비활성 — 실제 팀 구성 후 주석 해제):
+# *                     @실제팀또는사용자명
+# /harness/             @tech-lead-계정
+# /docs/trd/            @tech-lead-계정 @product-owner-계정
+# /.github/workflows/   @tech-lead-계정
+# /harness/harness_10_data_lifecycle.md  @security-담당자-계정

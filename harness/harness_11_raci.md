@@ -13,6 +13,7 @@
 |---|---|
 | Product Owner (기획) | 요구사항/우선순위/MVP 범위 최종 승인 |
 | Tech Lead (설계) | ADR/기술 컨벤션/데이터모델 최종 승인 |
+| Security (보안) | 인증/인가 방식, 암호화, MCP 서버 도입, 개인정보 유출 대응의 보안 관점 검토·승인. 1인/소규모 프로젝트는 Tech Lead가 겸임하되 `§4` 모자 전환 태그의 `[보안]`으로 구분 |
 | Reviewer (검증) | diff 리뷰, AC pass/fail 판정 |
 | Deploy Approver (운영) | 배포/롤백 승인 |
 | AI Agent (실행) | 코드 작성, 테스트 실행, 초안 작성 |
@@ -25,21 +26,22 @@
 ## §2. RACI 매트릭스
 R=실행책임, A=최종승인, C=협의, I=통보
 
-| 활동 | Product Owner | Tech Lead | Reviewer | Deploy Approver | AI Agent |
-|---|---|---|---|---|---|
-| 마스터 TRD 작성 | A | C | | | C(초안) |
-| 릴리스 계획(07) | A | C | | | C(초안) |
-| ADR(08) 승인 | I | A | | | R(초안) |
-| 단위 TRD AC 확정 | A | C | C | | C(초안) |
-| 작업지시서 작성 | R | C | | | |
-| 프롬프트 실행 | I | | | | R |
-| diff 리뷰 | I | C | A/R | | |
-| merge 승인 | | C | A | | |
-| 배포 승인 | I | C | | A | |
-| 롤백 결정 | I | C | | A/R | |
-| 백업 복구 실행 승인 | I | C | | A/R | |
-| 개인정보 유출 신고 승인 | A | C | | I | |
-| A0 갱신 | I | I | C | | R(초안) |
+| 활동 | Product Owner | Tech Lead | Security | Reviewer | Deploy Approver | AI Agent |
+|---|---|---|---|---|---|---|
+| 마스터 TRD 작성 | A | C | | | | C(초안) |
+| 릴리스 계획(07) | A | C | | | | C(초안) |
+| ADR(08) 승인 | I | A | C(인증/인가·암호화 관련 시) | | | R(초안) |
+| 단위 TRD AC 확정 | A | C | C(보안 항목 해당 시) | C | | C(초안) |
+| 작업지시서 작성 | R | C | | | | |
+| 프롬프트 실행 | I | | | | | R |
+| diff 리뷰 | I | C | | A/R | | |
+| merge 승인 | | C | | A | | |
+| 배포 승인 | I | C | | | A | |
+| 롤백 결정 | I | C | | | A/R | |
+| 백업 복구 실행 승인 | I | C | | | A/R | |
+| MCP 서버 도입 승인(`harness_13 §1`) | I | C | A/R | | | |
+| 개인정보 유출 신고 승인 | A | C | R | | I | |
+| A0 갱신 | I | I | | C | | R(초안) |
 
 ## §3. 역할-문서 소유권
 
@@ -50,6 +52,8 @@ graph LR
     TL[Tech Lead] --> D08[harness_08 ADR]
     TL --> D13[harness_13 기술컨벤션]
     TL --> D10[harness_10 데이터생애주기]
+    SEC[Security] --> D13b[harness_13 §3 인증보안·§1 MCP 서버]
+    SEC --> D10b[harness_10 §6 유출대응]
     RV[Reviewer] --> D02[작업지시서 diff검증]
     RV --> D03[A0 검증]
     DA[Deploy Approver] --> D09[harness_09 배포/롤백]
@@ -68,6 +72,7 @@ graph LR
 |---|---|---|
 | `[기획]` | Product Owner 모자 — 범위/우선순위 결정 | "[기획] 이 기능을 이번 릴리스 범위에 포함하기로 함" |
 | `[설계]` | Tech Lead 모자 — ADR/데이터모델/기술컨벤션 승인 | "[설계] ADR-00X 후보 B 채택" |
+| `[보안]` | Security 모자 — 인증/인가·암호화·MCP 서버 도입 승인 | "[보안] MCP 서버 X 도입 승인 — 공식 저장소, 최소 권한 확인" |
 | `[리뷰]` | Reviewer 모자 — diff/AC pass-fail 판정 | "[리뷰] AC 전부 pass 확인, merge 승인" |
 | `[배포]` | Deploy Approver 모자 — 배포/롤백 결정 | "[배포] 기준 브랜치 반영 승인" |
 

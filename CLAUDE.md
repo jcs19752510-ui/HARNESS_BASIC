@@ -136,6 +136,10 @@ this template" 버튼으로 완전히 새로운 저장소를 만들고, 그 새 
 - 프롬프트 생성 규칙: `harness/harness_04_prompt_generator_template.md`
 - 실행 인프라(브랜치/CI/권한/에스컬레이션): `harness/harness_05_execution_infra.md`
 - 회고 및 실패 패턴 라이브러리: `harness/harness_06_meta_improvement.md`
+- 취약점 신고 정책: `SECURITY.md` (루트) — 이 저장소 자체와 이 템플릿으로
+  만든 실제 프로젝트를 구분해서 다룸
+- 리뷰어 강제 지정(비활성 템플릿): `.github/CODEOWNERS`
+- 의존성 자동 업데이트: `.github/dependabot.yml` (github-actions만 즉시 활성)
 
 ### 확장 문서 (v1.1 — 2026-09-04 갭 분석으로 추가)
 - 🔴 릴리스/우선순위 계획: `harness/harness_07_release_planning.md`
