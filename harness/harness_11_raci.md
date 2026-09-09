@@ -40,6 +40,9 @@ R=실행책임, A=최종승인, C=협의, I=통보
 | 롤백 결정 | I | C | | | A/R | |
 | 백업 복구 실행 승인 | I | C | | | A/R | |
 | MCP 서버 도입 승인(`harness_13 §1`) | I | C | A/R | | | |
+| 자격증명 발급/폐기 승인(`harness_05 §3`) | I | C | A/R | | | |
+| 지속 메모리 이상 감지 시 폐기 승인(`harness_05 §3`) | I | C | A/R | | | |
+| AI 에이전트 이상행동 세션 중단 확인(`harness_05 §3`) | I | A/R | C | | | |
 | 개인정보 유출 신고 승인 | A | C | R | | I | |
 | A0 갱신 | I | I | | C | | R(초안) |
 
@@ -52,8 +55,12 @@ graph LR
     TL[Tech Lead] --> D08[harness_08 ADR]
     TL --> D13[harness_13 기술컨벤션]
     TL --> D10[harness_10 데이터생애주기]
+    TL --> D05[harness_05 실행인프라]
+    TL --> D15[harness_15 병렬작업]
+    TL --> D16[harness_16 기술부채]
     SEC[Security] --> D13b[harness_13 §3 인증보안·§1 MCP 서버]
     SEC --> D10b[harness_10 §6 유출대응]
+    SEC --> D05b[harness_05 §3 자격증명·메모리 신뢰]
     RV[Reviewer] --> D02[작업지시서 diff검증]
     RV --> D03[A0 검증]
     DA[Deploy Approver] --> D09[harness_09 배포/롤백]
